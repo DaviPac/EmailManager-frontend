@@ -1,0 +1,31 @@
+<div class="pointer-events-none fixed bottom-4 right-4 z-[60] flex flex-col-reverse gap-2">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div
+      class="pointer-events-auto flex min-w-72 max-w-sm items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white shadow-lg ring-1"
+      [class]="toast.type === 'success'
+        ? 'bg-zinc-900 ring-zinc-700'
+        : 'bg-red-600 ring-red-500'">
+
+      @if (toast.type === 'success') {
+        <svg class="h-4 w-4 shrink-0 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      } @else {
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      }
+
+      <span class="flex-1">{{ toast.message }}</span>
+
+      <button
+        (click)="toastService.dismiss(toast.id)"
+        class="shrink-0 text-white/50 transition hover:text-white">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+    </div>
+  }
+</div>

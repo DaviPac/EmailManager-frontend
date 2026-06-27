@@ -1,0 +1,74 @@
+<!-- Backdrop -->
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+  (click)="cancel()">
+
+  <!-- Dialog -->
+  <div
+    class="w-full max-w-md rounded-2xl bg-zinc-900 p-6 shadow-2xl ring-1 ring-zinc-700"
+    (click)="$event.stopPropagation()">
+
+    <h2 class="mb-1 text-lg font-semibold text-zinc-100">Criar email temporário</h2>
+    <p class="mb-5 text-sm text-zinc-400">Escolha o nome do seu endereço ou use o gerado automaticamente.</p>
+
+    <!-- Input + domain -->
+    <div
+      class="flex items-center overflow-hidden rounded-lg border transition focus-within:ring-2 focus-within:ring-amber-500/20 focus-within:border-amber-500"
+      [ngClass]="borderClass">
+
+      <input
+        class="flex-1 bg-transparent px-3 py-2.5 text-sm text-zinc-100 outline-none placeholder:text-zinc-600"
+        [formControl]="localPartControl"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="meuemail" />
+
+      <span class="select-none border-l border-zinc-700 bg-zinc-800 px-3 py-2.5 text-sm text-zinc-500">
+        &#64;pacmail.org
+      </span>
+
+    </div>
+
+    <!-- Verification status -->
+    <div class="mt-2 flex h-5 items-center gap-1.5 text-xs">
+
+      @if (localPartControl.touched && localPartControl.invalid) {
+        <span class="text-red-400">Use apenas letras, números, ponto, hífen ou underscore.</span>
+      } @else if (verifying()) {
+        <svg class="h-3 w-3 animate-spin text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+        <span class="text-zinc-500">Verificando disponibilidade...</span>
+      } @else if (available() === true) {
+        <span class="font-medium text-green-500">✓ Disponível</span>
+      } @else if (available() === false) {
+        <span class="font-medium text-red-400">✗ Indisponível</span>
+      }
+
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex gap-3">
+
+      <button
+        (click)="cancel()"
+        class="flex-1 rounded-lg border border-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-300 transition hover:bg-zinc-800">
+        Cancelar
+      </button>
+
+      <div class="flex-1">
+        <app-button
+          (click)="confirm()"
+          [loading]="creating()"
+          [disabled]="!canConfirm">
+          Criar
+        </app-button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,145 @@
+<div class="flex min-h-full flex-col bg-zinc-950">
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-10 border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-sm">
+    <div class="mx-auto flex max-w-6xl items-center px-6 py-4">
+
+      <div class="flex items-center gap-2.5">
+        <svg class="h-8 w-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#f59e0b"/>
+          <rect x="5" y="10" width="22" height="15" rx="2.5" fill="white"/>
+          <path d="M5 13.5L16 21L27 13.5" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-base font-semibold text-zinc-100">PacMail</span>
+      </div>
+
+      <nav class="ml-auto flex items-center gap-2">
+        <a routerLink="/login"
+          class="rounded-lg px-4 py-2 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200">
+          Entrar
+        </a>
+        <a routerLink="/register"
+          class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600">
+          Criar conta
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="mx-auto w-full max-w-4xl px-6 py-24 text-center md:py-32">
+
+    <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs font-medium text-amber-400">
+      <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/>
+      </svg>
+      Email temporário · 100% grátis
+    </div>
+
+    <h1 class="mb-6 text-5xl font-bold tracking-tight text-zinc-50 md:text-6xl lg:text-7xl">
+      Emails descartáveis,<br/>
+      <span class="text-amber-400">sem complicação.</span>
+    </h1>
+
+    <p class="mx-auto mb-10 max-w-xl text-lg text-zinc-400 md:text-xl">
+      Crie caixas de entrada temporárias em segundos. Receba mensagens em tempo real e delete quando quiser — sem rastros.
+    </p>
+
+    <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a routerLink="/register"
+        class="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-amber-500/20 transition hover:bg-amber-600 hover:shadow-amber-500/30">
+        Criar conta grátis
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </a>
+      <a routerLink="/login"
+        class="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-7 py-3.5 text-base font-medium text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100">
+        Entrar na conta
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Features -->
+  <section class="mx-auto w-full max-w-5xl px-6 pb-24">
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+      <!-- Feature 1 -->
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-7">
+        <div class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10">
+          <svg class="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/>
+          </svg>
+        </div>
+        <h3 class="mb-2 text-base font-semibold text-zinc-100">Instantâneo</h3>
+        <p class="text-sm leading-relaxed text-zinc-500">
+          Gere um endereço de email em segundos. Sem formulários longos, sem verificação demorada.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-7">
+        <div class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10">
+          <svg class="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+          </svg>
+        </div>
+        <h3 class="mb-2 text-base font-semibold text-zinc-100">Tempo Real</h3>
+        <p class="text-sm leading-relaxed text-zinc-500">
+          Mensagens chegam via WebSocket sem precisar atualizar a página. Tudo acontece ao vivo.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-7">
+        <div class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10">
+          <svg class="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </div>
+        <h3 class="mb-2 text-base font-semibold text-zinc-100">Descartável</h3>
+        <p class="text-sm leading-relaxed text-zinc-500">
+          Delete a caixa de entrada quando quiser. Nenhum dado permanente, nenhum rastro.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA section -->
+  <section class="mx-auto w-full max-w-2xl px-6 pb-24 text-center">
+    <div class="rounded-2xl border border-zinc-800 bg-zinc-900 px-8 py-12">
+      <h2 class="mb-3 text-2xl font-bold text-zinc-100">Pronto para começar?</h2>
+      <p class="mb-8 text-zinc-500">Crie sua conta em segundos. Sem cartão de crédito.</p>
+      <a routerLink="/register"
+        class="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-7 py-3.5 text-base font-semibold text-white transition hover:bg-amber-600">
+        Criar conta grátis
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-zinc-900 px-6 py-8">
+    <div class="mx-auto flex max-w-6xl items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <svg class="h-6 w-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#f59e0b"/>
+          <rect x="5" y="10" width="22" height="15" rx="2.5" fill="white"/>
+          <path d="M5 13.5L16 21L27 13.5" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-sm font-medium text-zinc-500">PacMail</span>
+      </div>
+      <p class="text-sm text-zinc-700">© 2026 PacMail. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</div>

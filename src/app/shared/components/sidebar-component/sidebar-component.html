@@ -1,0 +1,98 @@
+<!-- Backdrop (mobile only) -->
+@if (sidebarService.isOpen()) {
+  <div
+    class="fixed inset-0 z-40 bg-black/60 md:hidden"
+    (click)="sidebarService.close()">
+  </div>
+}
+
+<aside [class]="asideClass()">
+
+  <!-- Mobile header -->
+  <div class="flex items-center justify-between border-b border-zinc-800 px-4 py-3 md:hidden">
+    <span class="text-sm font-semibold text-zinc-200">Emails</span>
+    <button
+      (click)="sidebarService.close()"
+      class="rounded-lg p-1.5 text-zinc-500 transition hover:bg-zinc-800 hover:text-zinc-300">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Create button -->
+  <div class="p-3">
+    <button
+      (click)="openModal()"
+      [disabled]="creating()"
+      class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-amber-600 disabled:opacity-50">
+      @if (creating()) {
+        Criando...
+      } @else {
+        + Criar email
+      }
+    </button>
+  </div>
+
+  <!-- Mailbox list -->
+  <nav class="flex-1 overflow-y-auto px-2 pb-2">
+
+    @if (loading()) {
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="mb-1 h-10 animate-pulse rounded-lg bg-zinc-800"></div>
+      }
+    } @else if (mailboxes().length === 0) {
+      <p class="py-8 text-center text-xs text-zinc-600">
+        Nenhum email criado ainda.
+      </p>
+    } @else {
+      @for (mailbox of mailboxes(); track mailbox.id) {
+        <div class="group relative mb-0.5">
+
+          <a
+            [routerLink]="['/mailbox', mailbox.id]"
+            [state]="{ address: mailbox.address }"
+            routerLinkActive="bg-zinc-700 text-zinc-100"
+            (click)="sidebarService.close()"
+            class="flex w-full items-center rounded-lg px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200">
+            <span class="min-w-0 flex-1 truncate pr-5">{{ mailbox.address }}</span>
+          </a>
+
+          <button
+            (click)="$event.preventDefault(); requestDelete(mailbox.id)"
+            [disabled]="deletingId() === mailbox.id"
+            class="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-1 text-zinc-600 opacity-0 transition hover:text-red-400 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-30">
+            @if (deletingId() === mailbox.id) {
+              <span class="text-xs leading-none">...</span>
+            } @else {
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          </button>
+
+        </div>
+      }
+    }
+
+  </nav>
+
+</aside>
+
+@if (showModal()) {
+  <app-create-mailbox-modal
+    [creating]="creating()"
+    (confirmed)="onModalConfirmed($event)"
+    (cancelled)="onModalCancelled()">
+  </app-create-mailbox-modal>
+}
+
+@if (confirmingDeleteId()) {
+  <app-confirm-modal
+    title="Deletar mailbox?"
+    description="Todas as mensagens deste endereço serão permanentemente removidas."
+    confirmLabel="Deletar"
+    (confirmed)="onDeleteConfirmed()"
+    (cancelled)="onDeleteCancelled()">
+  </app-confirm-modal>
+}

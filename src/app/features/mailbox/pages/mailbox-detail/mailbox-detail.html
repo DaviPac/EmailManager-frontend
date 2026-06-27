@@ -1,0 +1,152 @@
+<div class="mx-auto max-w-3xl px-4 py-4 md:py-8">
+
+  <!-- Header -->
+  <div class="mb-4 flex items-center gap-3 md:mb-6">
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-2">
+        <h1 class="break-all text-base font-semibold text-zinc-100 md:text-lg">{{ address() }}</h1>
+        @if (connectionState() === 'connected') {
+          <span title="Tempo real ativo" class="h-2 w-2 shrink-0 rounded-full bg-green-400"></span>
+        } @else if (connectionState() === 'reconnecting') {
+          <span title="Reconectando..." class="h-2 w-2 shrink-0 animate-pulse rounded-full bg-yellow-400"></span>
+        } @else if (connectionState() === 'connecting') {
+          <span title="Conectando..." class="h-2 w-2 shrink-0 animate-pulse rounded-full bg-zinc-500"></span>
+        }
+      </div>
+      <p class="text-xs text-zinc-500 md:text-sm">
+        {{ unreadCount() }} não lida(s) · {{ messages().length }} total
+      </p>
+    </div>
+    <button
+      (click)="refresh()"
+      [disabled]="loading()"
+      class="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200 disabled:opacity-40">
+      Atualizar
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="flex flex-col gap-px overflow-hidden rounded-xl border border-zinc-800">
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="h-16 animate-pulse bg-zinc-800"></div>
+      }
+    </div>
+  } @else if (messages().length === 0) {
+    <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-700 py-16 text-center md:py-20">
+      <p class="font-medium text-zinc-500">Nenhuma mensagem</p>
+      <p class="mt-1 text-sm text-zinc-600">As mensagens recebidas aparecerão aqui.</p>
+    </div>
+  } @else {
+    <div class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+      @for (msg of messages(); track msg.id) {
+        <div class="border-b border-zinc-800 last:border-0">
+
+          <!-- Row -->
+          <div
+            class="flex cursor-pointer items-center gap-2 px-3 py-3 transition hover:bg-zinc-800 md:gap-3 md:px-4"
+            (click)="toggle(msg)">
+
+            <!-- Unread indicator -->
+            <span
+              class="h-2 w-2 shrink-0 rounded-full"
+              [class.bg-amber-500]="!msg.isRead"
+              [class.bg-transparent]="msg.isRead">
+            </span>
+
+            <!-- Content -->
+            <div class="min-w-0 flex-1">
+              <div class="flex items-baseline justify-between gap-2">
+                <p
+                  class="truncate text-sm"
+                  [class.font-semibold]="!msg.isRead"
+                  [class.font-normal]="msg.isRead"
+                  [class.text-zinc-100]="!msg.isRead"
+                  [class.text-zinc-400]="msg.isRead">
+                  {{ msg.from }}
+                </p>
+                <p class="shrink-0 text-xs text-zinc-500">
+                  {{ msg.receivedAt | date: 'dd/MM HH:mm' }}
+                </p>
+              </div>
+              <p
+                class="truncate text-sm"
+                [class.text-zinc-400]="!msg.isRead"
+                [class.text-zinc-600]="msg.isRead">
+                {{ msg.subject }}
+              </p>
+            </div>
+
+            <!-- Delete -->
+            <button
+              (click)="$event.stopPropagation(); requestDeleteMessage(msg.id)"
+              [disabled]="deletingId() === msg.id"
+              class="shrink-0 rounded px-2 py-1 text-xs font-medium text-red-500 transition hover:bg-red-500/10 disabled:opacity-40">
+              {{ deletingId() === msg.id ? '...' : 'Deletar' }}
+            </button>
+
+          </div>
+
+          <!-- Expanded body -->
+          @if (expandedId() === msg.id) {
+            <div class="border-t border-zinc-800 bg-zinc-950 px-4 py-4 md:px-6 md:py-5">
+
+              @if (loadingDetails() === msg.id) {
+                <p class="text-sm text-zinc-500">Carregando mensagem...</p>
+              } @else {
+                @let d = details()[msg.id];
+                @if (d) {
+                  <div class="mb-4 flex flex-col gap-1 text-xs text-zinc-500">
+                    <span><strong class="text-zinc-400">De:</strong> {{ d.from }}</span>
+                    <span><strong class="text-zinc-400">Para:</strong> {{ d.to }}</span>
+                    @if (d.cc) {
+                      <span><strong class="text-zinc-400">CC:</strong> {{ d.cc }}</span>
+                    }
+                    <span><strong class="text-zinc-400">Data:</strong> {{ d.receivedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+
+                  @if (d.htmlBody) {
+                    <div class="overflow-x-auto rounded-lg bg-white p-3 text-sm md:p-4" [innerHTML]="d.htmlBody"></div>
+                  } @else if (d.textBody) {
+                    <pre class="whitespace-pre-wrap break-words text-sm text-zinc-300">{{ d.textBody }}</pre>
+                  } @else {
+                    <p class="text-sm text-zinc-600">(Sem conteúdo)</p>
+                  }
+
+                  @if (d.attachments.length > 0) {
+                    <div class="mt-4 border-t border-zinc-800 pt-4">
+                      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Anexos</p>
+                      <div class="flex flex-col gap-1">
+                        @for (att of d.attachments; track att.id) {
+                          <div class="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm">
+                            <span class="min-w-0 flex-1 truncate text-zinc-300">{{ att.fileName }}</span>
+                            <span class="shrink-0 text-xs text-zinc-600">
+                              {{ (att.sizeBytes / 1024).toFixed(0) }} KB
+                            </span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              }
+
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+@if (confirmingDeleteId()) {
+  <app-confirm-modal
+    title="Deletar mensagem?"
+    description="Esta mensagem será permanentemente removida."
+    confirmLabel="Deletar"
+    (confirmed)="onDeleteConfirmed()"
+    (cancelled)="onDeleteCancelled()">
+  </app-confirm-modal>
+}
