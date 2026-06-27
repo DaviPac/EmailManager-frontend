@@ -1,7 +1,7 @@
 {
   "name": "PacMail",
   "short_name": "PacMail",
-  "description": "Caixa de entrada temporária e descartável",
+  "description": "Caixa de entrada descartável",
   "theme_color": "#09090b",
   "background_color": "#09090b",
   "display": "standalone",
