@@ -23,7 +23,7 @@ export class EmailService {
   public verifyMailbox(localPart: string): Observable<boolean> {
     return this.api.head(`/mailboxes/check-address?address=${localPart}`)
       .pipe(
-        map(() => true), 
+        map(() => false), 
         catchError((error) => {
           if (error.status === 404) {
             return of(true); 
