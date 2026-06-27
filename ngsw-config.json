@@ -11,6 +11,7 @@
           "/index.html",
           "/manifest.webmanifest",
           "/logo.svg",
+          "/og-image.png",
           "/*.css",
           "/*.js"
         ]
